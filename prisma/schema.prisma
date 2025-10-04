@@ -1,0 +1,206 @@
+// ============================================================
+// ShopSphere — Prisma Schema
+// Provider: SQLite (local dev). Swap to postgresql for prod.
+// Generator output: src/generated/prisma (Prisma 7 explicit path)
+// Connection URL is in prisma.config.ts, NOT here (Prisma 7 change).
+// ============================================================
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+// ─── Enums ────────────────────────────────────────────────────────────────────
+// SQLite stores enums as strings; Prisma handles the mapping transparently.
+
+enum Role {
+  CUSTOMER
+  ADMIN
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+}
+
+// ─── User ─────────────────────────────────────────────────────────────────────
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String
+  role         Role     @default(CUSTOMER)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // Relations
+  cartItems CartItem[]
+  orders    Order[]
+
+  @@index([email])
+  @@index([role])
+  @@map("users")
+}
+
+// ─── Category ─────────────────────────────────────────────────────────────────
+
+model Category {
+  id          String  @id @default(cuid())
+  name        String
+  slug        String  @unique
+  description String?
+  imageUrl    String?
+
+  // Relations
+  products Product[]
+
+  @@index([slug])
+  @@map("categories")
+}
+
+// ─── Product ──────────────────────────────────────────────────────────────────
+
+model Product {
+  id              String   @id @default(cuid())
+  name            String
+  slug            String   @unique
+  description     String
+  price           Int      // paise (1 INR = 100 paise)
+  compareAtPrice  Int?     // nullable — shown as strikethrough "was" price
+  stock           Int      @default(0)
+  categoryId      String
+  featured        Boolean  @default(false)
+  ratingAvg       Float    @default(0.0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Relations
+  category   Category       @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  images     ProductImage[]
+  cartItems  CartItem[]
+  orderItems OrderItem[]
+
+  @@index([slug])
+  @@index([categoryId])
+  @@index([featured])
+  @@index([categoryId, featured])
+  @@index([price])
+  @@index([createdAt])
+  @@map("products")
+}
+
+// ─── ProductImage ─────────────────────────────────────────────────────────────
+
+model ProductImage {
+  id        String @id @default(cuid())
+  productId String
+  url       String
+  position  Int    @default(0) // lower = primary image
+
+  // Relations
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId])
+  @@index([productId, position])
+  @@map("product_images")
+}
+
+// ─── CartItem ─────────────────────────────────────────────────────────────────
+
+model CartItem {
+  id        String @id @default(cuid())
+  userId    String
+  productId String
+  quantity  Int    @default(1)
+
+  // Relations
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, productId]) // one row per product per user; update quantity instead
+  @@index([userId])
+  @@index([productId])
+  @@map("cart_items")
+}
+
+// ─── Order ────────────────────────────────────────────────────────────────────
+
+model Order {
+  id              String      @id @default(cuid())
+  userId          String
+  status          OrderStatus @default(PENDING)
+  subtotal        Int         // paise
+  shippingFee     Int         // paise
+  total           Int         // paise — subtotal + shippingFee
+  shippingName    String
+  shippingAddress String
+  shippingCity    String
+  shippingPincode String
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  // Relations
+  user       User        @relation(fields: [userId], references: [id], onDelete: Restrict)
+  items      OrderItem[]
+  payment    Payment?
+
+  @@index([userId])
+  @@index([status])
+  @@index([userId, status])
+  @@index([createdAt])
+  @@map("orders")
+}
+
+// ─── OrderItem ────────────────────────────────────────────────────────────────
+// name + unitPrice are snapshots taken at purchase time so order history
+// stays accurate even if the product is later renamed or repriced.
+
+model OrderItem {
+  id        String @id @default(cuid())
+  orderId   String
+  productId String
+  name      String // snapshot of product name at time of order
+  unitPrice Int    // paise snapshot at time of order
+  quantity  Int
+
+  // Relations
+  order   Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Restrict)
+
+  @@index([orderId])
+  @@index([productId])
+  @@map("order_items")
+}
+
+// ─── Payment ──────────────────────────────────────────────────────────────────
+
+model Payment {
+  id        String        @id @default(cuid())
+  orderId   String        @unique // 1-1 with Order
+  amount    Int           // paise; mirrors order.total at time of payment
+  status    PaymentStatus @default(PENDING)
+  provider  String        @default("mock-stripe") // 'mock-stripe' | 'mock-razorpay'
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  // Relations
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@index([orderId])
+  @@index([status])
+  @@map("payments")
+}
