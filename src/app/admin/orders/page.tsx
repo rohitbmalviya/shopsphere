@@ -1,5 +1,4 @@
 import { adminListOrders } from "@/lib/actions/admin";
-import { formatPaise } from "@/lib/payments";
 import { AdminOrdersClient } from "./admin-orders-client";
 import type { Metadata } from "next";
 
@@ -23,7 +22,6 @@ export default async function AdminOrdersPage({ searchParams }: AdminOrdersPageP
       <AdminOrdersClient
         initialOrders={orders}
         activeStatus={statusFilter}
-        formatPaise={formatPaise}
       />
     </div>
   );

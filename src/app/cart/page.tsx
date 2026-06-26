@@ -29,7 +29,7 @@ export default async function CartPage() {
             Looks like you haven&apos;t added anything yet. Browse our products and find something you love.
           </p>
           <Link href="/products" className="mt-6">
-            <Button size="lg" className="gap-2">
+            <Button size="lg" className="h-11 px-6 gap-2">
               Start Shopping
               <ArrowRight size={16} />
             </Button>
@@ -109,7 +109,7 @@ export default async function CartPage() {
             </div>
 
             <Link href="/checkout" className="block mt-4">
-              <Button size="lg" className="w-full gap-2">
+              <Button size="lg" className="h-11 px-6 w-full gap-2">
                 Proceed to Checkout
                 <ArrowRight size={16} />
               </Button>

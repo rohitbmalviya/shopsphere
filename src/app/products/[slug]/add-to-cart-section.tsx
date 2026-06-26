@@ -97,7 +97,7 @@ export function AddToCartSection({ product }: AddToCartSectionProps) {
       {/* Add to Cart */}
       <Button
         size="lg"
-        className="w-full gap-2"
+        className="h-11 px-6 w-full gap-2"
         onClick={handleAddToCart}
         disabled={isOutOfStock || addingToCart}
         aria-disabled={isOutOfStock}
@@ -115,7 +115,7 @@ export function AddToCartSection({ product }: AddToCartSectionProps) {
         <Button
           size="lg"
           variant="outline"
-          className="w-full gap-2"
+          className="h-11 px-6 w-full gap-2"
           onClick={handleBuyNow}
           disabled={buyingNow}
         >

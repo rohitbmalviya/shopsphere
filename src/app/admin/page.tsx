@@ -146,7 +146,7 @@ export default async function AdminDashboardPage() {
                   <tr key={order.id} className="hover:bg-muted/30 transition-colors">
                     <td className="px-5 py-3.5">
                       <Link
-                        href={`/admin/orders`}
+                        href={`/orders/${order.id}`}
                         className="text-primary hover:underline font-mono text-xs"
                       >
                         #{order.id.slice(-8).toUpperCase()}

@@ -128,7 +128,7 @@ export function LoginForm({ next }: LoginFormProps) {
         )}
       </div>
 
-      <Button type="submit" className="w-full" disabled={isSubmitting}>
+      <Button type="submit" size="lg" className="h-11 px-6 w-full" disabled={isSubmitting}>
         {isSubmitting ? (
           <>
             <Loader2 size={15} className="animate-spin mr-2" />
@@ -142,8 +142,8 @@ export function LoginForm({ next }: LoginFormProps) {
       {/* Demo credentials */}
       <div className="rounded-lg bg-muted p-3 text-xs text-muted-foreground space-y-1">
         <p className="font-medium text-foreground">Demo credentials</p>
-        <p>Customer: customer1@shopsphere.dev / password123</p>
-        <p>Admin: admin@shopsphere.dev / password123</p>
+        <p>Customer: priya@example.com / Customer@1234</p>
+        <p>Admin: admin@shopsphere.dev / Admin@1234</p>
       </div>
     </form>
   );

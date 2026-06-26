@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/select";
 import { OrderStatusBadge } from "@/components/shared/order-status-badge";
 import { updateOrderStatus } from "@/lib/actions/admin";
+import { formatPaise } from "@/lib/payments";
 import { format } from "date-fns";
 import type { AdminOrderItem } from "@/lib/actions/admin";
 import Link from "next/link";
@@ -31,13 +32,11 @@ const STATUS_OPTIONS = ["PENDING", "PAID", "SHIPPED", "DELIVERED", "CANCELLED"];
 interface AdminOrdersClientProps {
   initialOrders: AdminOrderItem[];
   activeStatus: string;
-  formatPaise: (p: number) => string;
 }
 
 export function AdminOrdersClient({
   initialOrders,
   activeStatus,
-  formatPaise,
 }: AdminOrdersClientProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
@@ -109,9 +108,12 @@ export function AdminOrdersClient({
                 initialOrders.map((order) => (
                   <tr key={order.id} className="hover:bg-muted/30 transition-colors">
                     <td className="px-4 py-3">
-                      <p className="font-mono text-xs text-primary">
+                      <Link
+                        href={`/orders/${order.id}`}
+                        className="font-mono text-xs text-primary hover:underline"
+                      >
                         #{order.id.slice(-8).toUpperCase()}
-                      </p>
+                      </Link>
                     </td>
                     <td className="px-4 py-3">
                       <p className="font-medium">{order.customer.name}</p>

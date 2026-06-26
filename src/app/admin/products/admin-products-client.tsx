@@ -32,6 +32,7 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { SafeImage } from "@/components/shared/safe-image";
 import { createProduct, updateProduct, deleteProduct } from "@/lib/actions/admin";
+import { formatPaise } from "@/lib/payments";
 import { Pencil, Trash2, Plus, Search, Loader2, AlertTriangle } from "lucide-react";
 import type { AdminProductItem, ProductInput } from "@/lib/actions/admin";
 import type { CategoryItem } from "@/lib/actions/products";
@@ -39,7 +40,6 @@ import type { CategoryItem } from "@/lib/actions/products";
 interface AdminProductsClientProps {
   initialProducts: AdminProductItem[];
   categories: CategoryItem[];
-  formatPaise: (p: number) => string;
 }
 
 interface ProductFormValues {
@@ -58,7 +58,6 @@ interface ProductFormValues {
 export function AdminProductsClient({
   initialProducts,
   categories,
-  formatPaise,
 }: AdminProductsClientProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();

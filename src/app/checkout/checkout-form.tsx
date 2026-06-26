@@ -253,7 +253,7 @@ export function CheckoutForm() {
       <Button
         type="submit"
         size="lg"
-        className="w-full gap-2"
+        className="h-11 px-6 w-full gap-2"
         disabled={isSubmitting}
       >
         {isSubmitting ? (

@@ -32,13 +32,13 @@ export default async function HomePage() {
               </p>
               <div className="flex flex-wrap gap-3 mt-8">
                 <Link href="/products">
-                  <Button size="lg" className="gap-2">
+                  <Button size="lg" className="h-11 px-6 gap-2">
                     Shop Now
                     <ArrowRight size={16} />
                   </Button>
                 </Link>
                 <Link href="/products?sort=rating">
-                  <Button size="lg" variant="outline" className="gap-2">
+                  <Button size="lg" variant="outline" className="h-11 px-6 gap-2">
                     View Top Rated
                   </Button>
                 </Link>
@@ -181,7 +181,7 @@ export default async function HomePage() {
             <Link href="/products?sort=price_asc" className="shrink-0">
               <Button
                 size="lg"
-                className="bg-white text-primary hover:bg-white/90 font-semibold gap-2 shadow-lg"
+                className="h-11 px-6 bg-white text-primary hover:bg-white/90 font-semibold gap-2 shadow-lg"
               >
                 Shop Sale <ArrowRight size={16} />
               </Button>

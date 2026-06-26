@@ -1,7 +1,5 @@
 import { adminListProducts } from "@/lib/actions/admin";
 import { getCategories } from "@/lib/actions/products";
-import { formatPaise } from "@/lib/payments";
-import { Badge } from "@/components/ui/badge";
 import { AdminProductsClient } from "./admin-products-client";
 import type { Metadata } from "next";
 
@@ -23,7 +21,6 @@ export default async function AdminProductsPage() {
       <AdminProductsClient
         initialProducts={products}
         categories={categories}
-        formatPaise={formatPaise}
       />
     </div>
   );

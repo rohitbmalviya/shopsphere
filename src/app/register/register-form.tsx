@@ -144,7 +144,7 @@ export function RegisterForm() {
         )}
       </div>
 
-      <Button type="submit" className="w-full" disabled={isSubmitting}>
+      <Button type="submit" size="lg" className="h-11 px-6 w-full" disabled={isSubmitting}>
         {isSubmitting ? (
           <>
             <Loader2 size={15} className="animate-spin mr-2" />

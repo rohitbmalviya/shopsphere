@@ -35,7 +35,7 @@ export default async function OrdersPage() {
             You haven&apos;t placed any orders yet. Start shopping to see your orders here.
           </p>
           <Link href="/products" className="mt-6">
-            <Button size="lg" className="gap-2">
+            <Button size="lg" className="h-11 px-6 gap-2">
               Browse Products
               <ArrowRight size={16} />
             </Button>
